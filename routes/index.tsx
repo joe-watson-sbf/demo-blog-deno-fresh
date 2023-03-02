@@ -1,24 +1,28 @@
-import { Head } from "$fresh/runtime.ts";
-import Counter from "../islands/Counter.tsx";
+import Header from "../components/Header.tsx";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { loadPosts } from "../utils/posts.ts";
+import { Post } from "../types.d.tsx";
+import { Article } from "../components/Article.tsx";
 
-export default function Home() {
+export const handler: Handlers = {
+  async GET(request, context) {
+    const post: Post[] | [] = await loadPosts();
+    return context.render({ post });
+  },
+};
+
+export default function Home(props: PageProps) {
+  const posts: Post[] = props?.data?.post || [];
+
   return (
     <>
-      <Head>
-        <title>Fresh App</title>
-      </Head>
-      <div class="p-4 mx-auto max-w-screen-md">
-        <img
-          src="/logo.svg"
-          class="w-32 h-32"
-          alt="the fresh logo: a sliced lemon dripping with juice"
-        />
-        <p class="my-6">
-          Welcome to `fresh`. Try updating this message in the ./routes/index.tsx
-          file, and refresh.
-        </p>
-        <Counter start={3} />
-      </div>
+      <Header />
+      <main class="flex gap-4 flex-wrap m-4 justify-center">
+        {posts.map((post) => <Article post={post} />)}
+      </main>
+      <aside>
+        ASIDE
+      </aside>
     </>
   );
 }

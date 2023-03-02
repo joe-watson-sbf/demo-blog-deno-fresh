@@ -1,4 +1,4 @@
-# fresh project
+# DEMO BLOG - USING DENO FRESK FRAMEWORK
 
 ### Usage
 
